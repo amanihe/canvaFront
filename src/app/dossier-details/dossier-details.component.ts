@@ -115,7 +115,7 @@ ajoutlien(){
   }
   @Output() emitter: EventEmitter<string> = new EventEmitter<string>();
   refresh() {
-    this.getrectangle();
+
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'];
       console.log(this.id);
@@ -123,6 +123,7 @@ ajoutlien(){
       this.service.get_Rectangle_ByDossier(this.id).subscribe((data: any) => {
         data.forEach((x: any) => {
           this.service.get_Field_ByRectandDossier(x.R_Id, this.id).subscribe((res: any) => {
+            this.field=[...this.field]
             res['rect'] = x.R_Name;
             res['id'] = x.R_Id;
             this.field.push(res);
@@ -148,6 +149,7 @@ ajoutlien(){
         data.forEach((x: any) => {
           console.log(x);
           this.service.get_Field_ByRect(x.R_Id).subscribe((res: any) => {
+            this.field=[...this.field]
             res['rect'] = x.R_Name;
             res['id'] = x.R_Id;
             this.field.push(res);
