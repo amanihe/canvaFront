@@ -157,7 +157,7 @@ ajoutlien(){
         });
       });
     } else {
-      this.refresh();
+      window.location.reload();;
     }
   }
 
