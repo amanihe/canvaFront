@@ -115,7 +115,7 @@ ajoutlien(){
   }
   @Output() emitter: EventEmitter<string> = new EventEmitter<string>();
   refresh() {
-
+    this.getrectangle();
     this.route.params.subscribe((params: Params) => {
       this.id = params['id'];
       console.log(this.id);
@@ -212,7 +212,7 @@ onSelectField(event: any) {
       R_Id: this.selectedRectangleId
     };
     this.service.addDossierToRect(val2).subscribe((res) => {
-      alert(res.toString());
+      alert("added successfully");
       window.location.reload();;
     });
   }
@@ -238,7 +238,7 @@ onSelectField(event: any) {
     };
     console.log(val2)
     this.service.addDossierToField(val2).subscribe((res) => {
-      alert(res.toString());
+      alert("added successfully");
       window.location.reload();;
     });
   }

@@ -99,6 +99,7 @@
                   </div>
                   <input *ngIf="nouv" type="text" class="form-control" id="recipient-name" name="field" [(ngModel)]="RectField" >
                   <select *ngIf="exist" (change)="onSelectField($event)" style="width: 100%;">
+                    <option></option>
                     <option   *ngFor="let f of fields" id="recipient-name" [value]="f.Field_Id">{{f.Field_Name}}</option>
                   </select>
                 </div>
