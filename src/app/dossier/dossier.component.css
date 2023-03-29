@@ -1,0 +1,40 @@
+ul {
+  list-style-type: none;
+}
+.btninitial{
+  width:150px;
+  height: 40px;
+  background-color: #333366;
+   color: antiquewhite;
+   border-radius: 15px;
+   margin:2%;
+}
+.btninitial:hover{
+  background-color:#961919;
+  width: 155px;
+
+}
+
+.sousbtn{
+  width:140px;
+
+  margin-left:10px;
+color:antiquewhite
+}
+.sousbutton{
+  background-color: #333366; color: antiquewhite;border-radius: 15px;
+}
+.sousbutton:hover{
+  background-color:#961919;
+}
+
+.container{
+  margin:30%;
+}
+.ajoutDossier{
+  margin: auto;
+}
+button
+{
+  color: #333366;
+}

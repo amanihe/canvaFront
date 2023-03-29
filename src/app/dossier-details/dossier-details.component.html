@@ -1,0 +1,148 @@
+
+<div class="container">
+<div  class="card-columns all" >
+  <div class="card border-dark m-3 rect" *ngFor="let r of field"  >
+    <div class="card-header cardtitle" style="color:black" >{{r.rect}}</div>
+    <div class="card-body crd">
+<!-- Button trigger modal -->
+<div class="buttons">
+
+<button type="button" class="btn btn-outline-info" style="  background-color: #333366; border-color: 	whitesmoke; color: white;" data-toggle="modal" data-target="#exampleModal" *ngFor="let x of r" (click)="openModal(x.Field_Id,x.Field_Name)">
+  {{x.Field_Name}}
+</button>
+<!-- Modal -->
+<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm " role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h5 class="modal-title m-auto " id="exampleModalLabel" *ngIf="showModal">{{nomFieldModal}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body body ">
+        <div *ngFor="let link of links">
+        <a  class="btn btn-info "  [href]="link.Link_Url" style="background-color: #961919; color: antiquewhite; width:100%; margin:4%">{{link.Link_Name}}</a>
+      </div>
+      <select  [(ngModel)]="final" class="form-select" aria-label="Default select example" class="select">
+
+        <option value="file" >file</option>
+
+        <option value="link" >link</option>
+      </select>
+
+        <br>
+        <div *ngIf="final === 'file'">
+          <!-- Champ de téléchargement de fichiers -->
+          <form (ngSubmit)="onSubmit($event)" #myForm="ngForm" enctype="multipart/form-data">
+
+            <input type="file" name="file" class="form-control form-control-sm" >
+            <br>
+            <button type="submit" class="btn btn-info "  style="background-color: #333366; color: antiquewhite">Ajouter à Drive</button>
+            <button  class="btn btn-danger "(click)="supprimerFied()">Supprimer</button>
+          </form>
+          <br>
+
+
+        </div>
+
+        <div *ngIf="final === 'link'">
+          <!-- Champs pour entrer le nom et le lien -->
+          <form >
+          <label>Nom </label>
+          <input type="text" name="name" [(ngModel)]="linkName">
+          <label>Lien</label>
+          <input type="link" name="link"[(ngModel)]="linkUrl">
+          <button type="submit" class="btn btn-info "  style="background-color: #333366; color: antiquewhite" (click)="ajoutlien()">Ajouter</button>
+        </form>
+        </div>
+      </div>
+      <div class="modal-footer " style="justify-content: center;">
+
+        <button type="button" class="btn btn-info" style="background-color: #333366; color: antiquewhite" >valider</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+      <br>
+      <div>
+      <a data-toggle="modal" data-target="#exampleModal2" data-elementid="element1"  (click)="openModalRect(r.id,r.rect)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-plus" viewBox="0 0 16 16">
+        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+        <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+      </svg>
+    </a>
+    <a (click)="supprimerRect(r.id)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+      <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+    </svg>
+  </a>
+  </div>
+     <!----> <div class="modal fade bd-example-modal-sm" *ngIf="showModal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title " id="exampleModalLabel">{{nomModal}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModalRect()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Field:</label>
+                  <div class="choix ">
+                    <a (click)=" nouv=false;  exist=true;getexistfield(idrectModal)" >Exitant</a>
+                    <a (click)=" nouv=true;exist=false" >Nouveau</a>
+                  </div>
+                  <input *ngIf="nouv" type="text" class="form-control" id="recipient-name" name="field" [(ngModel)]="RectField" >
+                  <select *ngIf="exist" (change)="onSelectField($event)" style="width: 100%;">
+                    <option   *ngFor="let f of fields" id="recipient-name" [value]="f.Field_Id">{{f.Field_Name}}</option>
+                  </select>
+                </div>
+
+              </form>
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info m-auto" style="background-color: #333366; color: antiquewhite"  (click)="addField(idrectModal,field.value)">Ajouter </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<div class="ml-5" >
+  <div class="choix ">
+    <a (click)="nouveau=false;existant=true" >Exitant</a>
+    <a (click)="nouveau=true;existant=false" >Nouveau</a>
+  </div>
+<div class="card card  mt-2  add" style="border-color:   #333366;">
+  <div class="card-header ">
+    <input *ngIf="nouveau" type="text" style="width:100%" [(ngModel)]="RectName"/>
+    <select *ngIf="existant"[(ngModel)]="RectName" (change)="onSelectRectangle($event)" style="width: 100%;">
+      <option   *ngFor="let rect of allRectangles" [value]="rect.R_Id">{{rect.R_Name}}</option>
+    </select>
+  </div>
+  <div class="card-body">
+    <a type="button" class="btn btn-outline-info " style="  background-color: #333366; border-color: 	#800000; color: white;"(click)="addRectangle()">Ajouter</a>
+  </div>
+</div>
+</div>
+</div>
+<br>
+<div class="fils">
+  <label for="check" style="margin:1%">Fils</label>
+<input type="checkbox" id="check" name="check"  value="fils" style="margin-top:1px" (change)="onCheckboxChange($event)">
+
+</div>
+
+
+
+
