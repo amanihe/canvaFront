@@ -7,24 +7,151 @@
 <!-- Button trigger modal -->
 <div class="buttons">
 
-<button type="button" class="btn btn-outline-info" style="  background-color: #333366; border-color: 	whitesmoke; color: white;" data-toggle="modal" data-target="#exampleModal" *ngFor="let x of r" (click)="openModal(x.Field_Id,x.Field_Name)">
+<button type="button" class="btn btn-field" style="  background-color: #333366; border-color: 	whitesmoke; color: white;" data-toggle="modal" data-target="#exampleModal" *ngFor="let x of r" (click)="openModal(x.Field_Id,x.Field_Name)">
   {{x.Field_Name}}
 </button>
 <!-- Modal -->
-<div class="modal fade bd-example-modal-sm " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm " role="document">
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header ">
-        <h5 class="modal-title m-auto " id="exampleModalLabel" *ngIf="showModal">{{nomFieldModal}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+        <button class="  m-auto ml-4 title " id="exampleModalLabel" *ngIf="showModal">{{nomFieldModal}}</button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal();Dossier=false;Attachement=false;FileLink=false">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body body ">
-        <div *ngFor="let link of links">
-        <a  class="btn btn-info "  [href]="link.Link_Url" style="background-color: #961919; color: antiquewhite; width:100%; margin:4%">{{link.Link_Name}}</a>
+        <div class="fieldchoice">
+        <button class=" btn-choice " *ngIf="showModal" (click)="Attachement=!Attachement;FileLink=false;Dossier=false" [ngClass]="{ 'btn-blue': Attachement }">Attachement</button>
+        <button class=" btn-choice" *ngIf="showModal" (click)="FileLink=!FileLink;Attachement=false;Dossier=false"  [ngClass]="{ 'btn-blue': FileLink }">File/Link</button>
+        <button class=" btn-choice " *ngIf="showModal" (click)="Dossier=!Dossier;Attachement=false;FileLink=false" [ngClass]="{ 'btn-blue': Dossier }">Dossier</button>
       </div>
-      <select  [(ngModel)]="final" class="form-select" aria-label="Default select example" class="select">
+      <br>
+      <div>
+        <div   *ngFor="let link of linksDossier" class="mt-2 d-flex justify-content-center">
+          <a *ngIf="estSupprime&&Attachement" (click)="supprimerLink(link)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-trash"
+              viewBox="0 0 16 16"
+              color="red"
+            >
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+              />
+            </svg>
+          </a>
+          <a *ngIf="estRetire&&Attachement" (click)="retirerLink(link.Link_Id);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right text-warning" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+              <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+          </a>
+          <a *ngIf="estRenomme&&Attachement" (click)="link.rename = true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-pencil-square text-info"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+              />
+            </svg>
+          </a>
+          <input
+          *ngIf="link.rename && estRenomme"
+          type="text"
+          class="input-dossier"
+          id="dossier-rename"
+          value="{{ link.Link_Name }}"
+        />
+        <div class="mt-2" [hidden]="!link.rename || !estRenomme">
+          <a
+            type="button"
+            class="btn btn-success mr-2"
+
+          >
+            v
+          </a>
+          <a
+            (click)="link.rename = false"
+            type="button"
+            class="btn btn-danger"
+            >c</a
+          >
+        </div>
+
+          <a  type="button" *ngIf="Attachement&&(!link.rename || !estRenomme)"  [href]="link.Link_Url" class=" btn btn-filelink">{{link.Link_Name}}</a>
+
+      </div>
+      <br *ngIf="Attachement">
+      <div class="d-flex">
+      <button
+      type="button"
+      *ngIf="Attachement"
+
+      class="btn btn-attach"
+      [ngClass]="{
+        'btn-outline-danger': !estSupprime,
+        'btn-danger': estSupprime
+      }"
+      (click)="estSupprime = !estSupprime"
+    >
+      Supprimer
+    </button>
+      <button
+      type="button"
+      *ngIf="Attachement"
+
+      class="btn btn-attach"
+      [ngClass]="{
+        'btn-outline-warning': !estRetire,
+        'btn-warning': estRetire
+      }"
+      (click)="estRetire = !estRetire"
+    >
+      Retirer
+    </button>
+    <button
+    type="button"
+    *ngIf="Attachement"
+    class="btn btn-attach"
+    [ngClass]="{ 'btn-outline-info': !estRenomme, 'btn-info': estRenomme }"
+    (click)="estRenomme = !estRenomme"
+  >
+    Renommer
+  </button>
+</div>
+    </div>
+    <div class="choix " *ngIf="FileLink">
+      <button  (click)="nouvFileLink=false;existFileLink=true" class="mr-5" [ngClass]="{ ' btn-blue': existFileLink }" >Exitant</button>
+      <button (click)="nouvFileLink=true;existFileLink=false" class="ml-5"[ngClass]="{ ' btn-blue': nouvFileLink }" >Nouveau</button>
+    </div>
+    <br *ngIf="FileLink&&existFileLink">
+    <select *ngIf="FileLink&&existFileLink"(change)="onSelectLink($event)" class="select-filelink">
+      <option></option>
+      <option   *ngFor="let link of links" id="recipient-name" [value]="link.Link_Id">{{link.Link_Name}}</option>
+    </select>
+    <br *ngIf="FileLink">
+    <!--a faire-->
+    <button type="submit" *ngIf="existFileLink" class="btn btn-info "  style="background-color: #333366; color: antiquewhite" (click)="ajoutlien()">Ajouter</button>
+
+
+    <select *ngIf="FileLink&&nouvFileLink" [(ngModel)]="final" class="select-filelink" aria-label="Default select example">
 
         <option value="file" >file</option>
 
@@ -32,34 +159,35 @@
       </select>
 
         <br>
-        <div *ngIf="final === 'file'">
+        <div *ngIf="final === 'file'&&FileLink&&nouvFileLink">
           <!-- Champ de téléchargement de fichiers -->
-          <form (ngSubmit)="onSubmit($event)" #myForm="ngForm" enctype="multipart/form-data">
+          <form (ngSubmit)="ajoutFile($event)" #myForm="ngForm" enctype="multipart/form-data">
 
             <input type="file" name="file" class="form-control form-control-sm" >
             <br>
             <button type="submit" class="btn btn-info "  style="background-color: #333366; color: antiquewhite">Ajouter à Drive</button>
-            <button  class="btn btn-danger "(click)="supprimerFied()">Supprimer</button>
+
           </form>
           <br>
 
 
         </div>
 
-        <div *ngIf="final === 'link'">
+        <div *ngIf="final === 'link'&&FileLink&&nouvFileLink">
           <!-- Champs pour entrer le nom et le lien -->
           <form >
           <label>Nom </label>
           <input type="text" name="name" [(ngModel)]="linkName">
           <label>Lien</label>
           <input type="link" name="link"[(ngModel)]="linkUrl">
+          <br>
           <button type="submit" class="btn btn-info "  style="background-color: #333366; color: antiquewhite" (click)="ajoutlien()">Ajouter</button>
         </form>
         </div>
       </div>
       <div class="modal-footer " style="justify-content: center;">
 
-        <button type="button" class="btn btn-info" style="background-color: #333366; color: antiquewhite" >valider</button>
+        <button type="button" class="btn btn-danger"  data-dismiss="modal" aria-label="Close" (click)="closeModal();Dossier=false;Attachement=false;FileLink=false" >annuler</button>
 
       </div>
     </div>
@@ -74,11 +202,37 @@
         <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
       </svg>
     </a>
-    <a (click)="supprimerRect(r.id)">
+    <a  data-toggle="modal" data-target="#exampleModalCenter" (click)="idrectModal=r.id;nomModal=r.rect">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
     </svg>
   </a>
+  <a (click)="idrectModal=r.id;nomModal=r.rect;editRectField=!editRectField">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+  </svg>
+  </a>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Supprimer {{nomModal}} definitivement ou retirer seulement de ce dossier
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="supprimerRect(idrectModal)">supprimer</button>
+        <button type="button" class="btn btn-warning"(click)="retirerRect(idrectModal)">retirer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------>
   </div>
      <!----> <div class="modal fade bd-example-modal-sm" *ngIf="showModal" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
@@ -121,8 +275,8 @@
 </div>
 <div class="ml-5" >
   <div class="choix ">
-    <a (click)="nouveau=false;existant=true" >Exitant</a>
-    <a (click)="nouveau=true;existant=false" >Nouveau</a>
+    <button  (click)="nouveau=false;existant=true" [ngClass]="{ ' btn-blue': existant }" >Exitant</button>
+    <button (click)="nouveau=true;existant=false" [ngClass]="{ ' btn-blue': nouveau }" >Nouveau</button>
   </div>
 <div class="card card  mt-2  add" style="border-color:   #333366;">
   <div class="card-header ">

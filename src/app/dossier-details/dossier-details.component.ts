@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { DossierService } from '../service/dossier/dossier.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+
 
 
 /**
@@ -21,6 +22,7 @@ export class DossierDetailsComponent implements OnInit {
   rectangles: any = [];
   allRectangles: any = [];
   links: any = [];
+  linksDossier: any = [];
   RectName: any;
   RectField: any;
   final:any="file";
@@ -35,11 +37,22 @@ export class DossierDetailsComponent implements OnInit {
   exist:boolean=false;
   selectedRectangleId:any;
   selectedFieldId:any;
+  selectedLinkId:any;
 
   showModal = false;
   idrectModal :number=0;
   nomModal:string="";
 
+  Attachement:boolean=false;
+  Dossier:boolean=false;
+  FileLink:boolean=false;
+  estSupprime:boolean=false;
+  estRenomme:boolean=false;
+  estRetire:boolean=false;
+  nouvFileLink:boolean=true;
+  existFileLink:boolean=false;
+  editRectField:boolean=false;
+  deleteRectField:boolean=false;
   openModalRect(id:any,nom:any) {
     this.idrectModal = id;
     this.nomModal=nom
@@ -61,6 +74,7 @@ export class DossierDetailsComponent implements OnInit {
     this.showModal = true;
     console.log()
     this.getLink(id)
+    this.getLinkByDossier(id)
   }
 
   closeModal() {
@@ -70,7 +84,7 @@ export class DossierDetailsComponent implements OnInit {
   constructor(private service: DossierService, private route: ActivatedRoute,fb: FormBuilder,private http: HttpClient) {
 
   }
-  onSubmit(event: any) {
+  ajoutFile(event: any) {
     const fileInput = event.target.querySelector('input[type="file"]');
     const file = fileInput.files[0];
 
@@ -83,7 +97,8 @@ export class DossierDetailsComponent implements OnInit {
         var val = {
           Link_Name: data.name,
           Link_Url: data.link,
-          Field_Id:this.idFieldModal
+          Field_Id:this.idFieldModal,
+          Dossier_Id:this.id
         };
         console.log(val)
         this.service.addLink(val).subscribe((res) => {
@@ -93,19 +108,36 @@ export class DossierDetailsComponent implements OnInit {
 
       });
   }
-
+  onSelectLink(event: any) {
+    this.selectedLinkId = event.target.value;
+    console.log( this.selectedLinkId)
+  }
 ajoutlien(){
+  if(this.nouvFileLink){
   var val = {
     Link_Name: this.linkName,
     Link_Url: this.linkUrl,
-    Field_Id:this.idFieldModal
+    Field_Id:this.idFieldModal,
+    Dossier_Id:this.id
   };
   console.log(val)
   this.service.addLink(val).subscribe((res) => {
     alert(res.toString());
     window.location.reload();;
   });
+  }
+  else if(this.existFileLink){
+    var val2 = {
+      Dossier_Id: this.id,
+      Link_Id: this.selectedLinkId
+    };
+    console.log(val2)
+    this.service.addDossierToLink(val2).subscribe((res) => {
+      alert("added successfully");
+      window.location.reload();;
+    });
 
+  }
 }
 
   ngOnInit(): void {
@@ -148,7 +180,7 @@ ajoutlien(){
         this.field = [];
         data.forEach((x: any) => {
           console.log(x);
-          this.service.get_Field_ByRect(x.R_Id).subscribe((res: any) => {
+          this.service.get_Field_By_DossierParent(x.R_Id,this.id).subscribe((res: any) => {
             this.field=[...this.field]
             res['rect'] = x.R_Name;
             res['id'] = x.R_Id;
@@ -181,6 +213,13 @@ fieldbyrect(id:any){
   console.log(res);
 })
 }
+  getLinkByDossier(id:any){
+
+    this.service.getLinkListByDossier(id,this.id).subscribe((res: any) => {
+  this.linksDossier = res;
+  console.log(res);
+})
+}
   getrectangle(){
       this.service.getRectangleList().subscribe((rect: any) => {
     this.allRectangles = rect;
@@ -194,6 +233,7 @@ onSelectField(event: any) {
   this.selectedFieldId = event.target.value;
   console.log(event.target.value)
 }
+
   addRectangle() {
     if (this.nouveau){
     var val = {
@@ -203,7 +243,7 @@ onSelectField(event: any) {
     console.log(val)
     this.service.addRectangle(val).subscribe((res) => {
       alert("added successfully");
-      window.location.reload();;
+      this.refresh();
     });
   }
   else if(this.existant){
@@ -213,7 +253,7 @@ onSelectField(event: any) {
     };
     this.service.addDossierToRect(val2).subscribe((res) => {
       alert("added successfully");
-      window.location.reload();;
+      this.refresh();
     });
   }
   }
@@ -229,6 +269,8 @@ onSelectField(event: any) {
 
       alert("added successfully");
       window.location.reload();;
+     // this.activeModal.close();
+      this.refresh();
     });
   }
   else if(this.exist){
@@ -248,16 +290,44 @@ onSelectField(event: any) {
     this.service.deleteReactangle(id).subscribe((data) => {
       alert(data.toString());
       this.refresh();
-      window.location.reload();;
+
     });
   }
  }
- supprimerFied()
+ supprimerField()
 {
   if (confirm('Are you sure to delete ??'+this.idFieldModal)) {
     this.service.deleteField(this.idFieldModal).subscribe((data:any) => {
       alert(data.toString());
 
+      window.location.reload();;
+    });
+  }
+ }
+ supprimerLink(link:any)
+{
+  if (confirm('Are you sure to delete definitively '+link.Link_Name+' ??')) {
+    this.service.deleteLink(link.Link_Id).subscribe((data:any) => {
+      alert(data.toString());
+      window.location.reload();;
+    });
+  }
+ }
+ retirerLink(idLink:any)
+{
+  if (confirm('Are you sure to withdrow ??')) {
+    this.service.delete_dossier_from_link(idLink,this.id).subscribe((data:any) => {
+      alert("retiré avec succès");
+      window.location.reload();;
+    });
+  }
+ }
+ retirerRect(idRect:any)
+{
+  console.log(idRect)
+  if (confirm('Are you sure to withdrow ??')) {
+    this.service.delete_dossier_from_rect(idRect,this.id).subscribe((data:any) => {
+      alert("retiré avec succès");
       window.location.reload();;
     });
   }

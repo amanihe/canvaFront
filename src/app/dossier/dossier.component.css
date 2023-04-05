@@ -4,14 +4,14 @@ ul {
 .btninitial{
   width:150px;
   height: 40px;
-  background-color: #333366;
-   color: antiquewhite;
-   border-radius: 15px;
+  background-color: white;
+  border-color:#333366 ;
+  border-width: 3px;
+   border-radius: 10px;
    margin:2%;
 }
 .btninitial:hover{
   background-color:#961919;
-  width: 155px;
 
 }
 
@@ -25,7 +25,7 @@ color:antiquewhite
   background-color: #333366; color: antiquewhite;border-radius: 15px;
 }
 .sousbutton:hover{
-  background-color:#961919;
+  background-color:#333366;
 }
 
 .container{
@@ -34,7 +34,27 @@ color:antiquewhite
 .ajoutDossier{
   margin: auto;
 }
-button
+
+.btn-blue
 {
-  color: #333366;
+background-color: #333366;
+color: white;
+}
+.input-blue
+{
+background-color: #333366;
+color: white;
+}
+.input-dossier{
+  width:150px;
+      height: 40px;
+      background-color: white;
+      border-color:#333366 ;
+      border-width: 3px;
+      border-radius: 10px;margin:2%;
+}
+.addSousDossier
+{
+  display: flex;
+  flex-direction: row-reverse;
 }

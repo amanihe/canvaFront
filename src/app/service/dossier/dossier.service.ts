@@ -34,6 +34,9 @@ export class DossierService {
   addDossierToField(val: any) {
     return this.http.post(this.APIUrl + '/fielddossier/', val);
   }
+  addDossierToLink(val: any) {
+    return this.http.post(this.APIUrl + '/add_dossier_to_link/', val);
+  }
   getDossierList(): Observable<any[]> {
     return this.http.get<any[]>(this.APIUrl + '/dossier/');
   }
@@ -44,6 +47,9 @@ export class DossierService {
   getLinkList(id:any): Observable<any[]> {
     return this.http.get<any[]>(this.APIUrl + '/getLink_ByField/'+id);
   }
+  getLinkListByDossier(idLink: any,idDossier:any) {
+    return this.http.get<any[]>(this.APIUrl + '/Link_By_FieldDossier/'+idLink+'/'+idDossier);
+  }
   get_Rectangle_ByDossier(id: any):Observable<any[]> {
     return this.http.get<any[]>(this.APIUrl + '/getRectByDossier/' + id);
   }
@@ -53,6 +59,10 @@ export class DossierService {
   get_Field_ByRectandDossier(idRect: any,idDossier:any) {
     return this.http.get<any[]>(this.APIUrl + '/Field_By_RectDossier/'+idRect+'/'+idDossier);
   }
+  get_Field_By_DossierParent(idRect: any,idDossier:any) {
+    return this.http.get<any[]>(this.APIUrl + '/Field_By_DossierParent/'+idRect+'/'+idDossier);
+  }
+
   getAllByParent(id: any):Observable<any[]> {
     return this.http.get<any[]>(this.APIUrl + '/getAllRectByParent/' + id);
   }
@@ -68,5 +78,17 @@ export class DossierService {
   }
   deleteField(val: any) {
     return this.http.delete(this.APIUrl + '/field/' + val);
+  }
+  deleteLink(val: any) {
+    return this.http.delete(this.APIUrl + '/link/' + val);
+  }
+  delete_dossier_from_link(linkid: any,dossierid:any) {
+    return this.http.delete(this.APIUrl + '/delete_dossier_from_link/' + linkid+'/'+dossierid);
+  }
+  delete_dossier_from_rect(rectid: any,dossierid:any) {
+    return this.http.delete(this.APIUrl + '/delete_dossier_from_rect/' + rectid+'/'+dossierid);
+  }
+  updateDossier(val: any): Observable<any> {
+    return this.http.put(this.APIUrl + '/dossier/' + val.Dossier_Id, val);
   }
 }

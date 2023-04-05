@@ -11,7 +11,10 @@ import { DossierService } from "../service/dossier/dossier.service";
 export class DossierComponent implements OnInit {
 
   @Input() dossiers: any = [];
-
+  currentDossier: any = null;
+  showInput:boolean = false;
+  estSupprime:boolean = false;
+  estRenomme:boolean = false;
 
   constructor(private service: DossierService, private router: Router) {
 
@@ -62,6 +65,7 @@ export class DossierComponent implements OnInit {
     this.service.addDossier(val).subscribe((res) => {
       alert(res.toString());
       this.getDossiers(0);
+      this.showInput=false;
     });
   }
   Add_Sous_Dossier(id: any) {
@@ -77,9 +81,48 @@ export class DossierComponent implements OnInit {
     });
 
   }
-  openDossier(id: any) {
-    console.log(id);
+  updateDossier(dossier: any) {
+    var val = {
+      Dossier_Id:dossier.Dossier_Id,
+      Dossier_Name: (<HTMLInputElement>document.getElementById("dossier-rename"))
+        .value,
+      Dossier_Parent: dossier.Dossier_Parent,
+    };
+    console.log(val);
+    this.service.updateDossier(val).subscribe((res) => {
+      alert(res.toString());
+      this.getDossiers(0);
+    });
+
+  }
+  openDossier(id: any,dossiers:any) {
     this.router.navigate(["/dossier/", id]);
+    for (let i = 0; i < dossiers.length; i++) {
+      if (dossiers[i].Dossier_Id === id) {
+        dossiers[i].expanded = !dossiers[i].expanded;
+      } else {
+        dossiers[i].expanded = false;
+        this.showInput=false;
+        if (dossiers[i].children?.length > 0) {
+          this.closeDossiers(dossiers[i].children);
+        }
+      }
+
+    }
+
+
+
+    console.log(id);
+
+  }
+  closeDossiers(dossiers: any[]): void {
+    for (let i = 0; i < dossiers.length; i++) {
+      dossiers[i].expanded = false;
+      this.showInput=false;
+      if (dossiers[i].children?.length > 0) {
+        this.closeDossiers(dossiers[i].children);
+      }
+    }
   }
   supprimer(id: any) {
     if (confirm("Are you sure to delete ??")) {
@@ -90,6 +133,6 @@ export class DossierComponent implements OnInit {
       });
     }
   }
- 
+
 }
 

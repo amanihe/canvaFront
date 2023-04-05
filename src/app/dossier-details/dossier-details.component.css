@@ -34,6 +34,14 @@
   flex-direction: column;
   align-items: center;
 }
+.btn-field{
+  min-width:150px;
+  min-height: 40px;
+  background-color: #333366 ;
+  color: white;
+  border-width: 3px;
+   border-radius: 10px;
+}
 .buttons{
 
   display: flex;
@@ -41,6 +49,15 @@
   align-items: center;
   overflow: auto;
   max-height: 112.5px;
+}
+.title{
+  min-width:300px;
+  min-height: 40px;
+  background-color: #333366;
+  color:white;
+  border-width: 3px;
+  border-radius: 10px;
+
 }
 .add{
   min-width: 200px;
@@ -52,13 +69,9 @@
   display: flex;
   justify-content: space-between
 }
-a{
-  color:black
 
-}
 a:hover{
   text-decoration: underline;
-  color: red;
 }
 .body{
   display: flex;
@@ -89,3 +102,45 @@ form
   text-align: center;
   }
 
+.fieldchoice
+{
+  display: flex;
+}
+.btn-choice{
+  width:150px;
+  height: 40px;
+  background-color: white;
+  border-color:#333366 ;
+  border-width: 3px;
+   border-radius: 10px;
+   margin-left: 2%;
+}
+.btn-blue{
+background-color: #333366;
+color: white;
+}
+.btn-filelink{
+  width:80%;
+  height: 40px;
+  background-color: white;
+  border-color:#333366 ;
+  color: black;
+  border-width: 3px;
+   border-radius: 10px;
+}
+.btn-attach{
+  width: 150px;
+  height: 40px;
+  border-width: 3px;
+  border-radius: 10px;
+  margin: 2%;
+}
+
+.select-filelink{
+  min-width:100px;
+    height: 35px;
+    background-color: white;
+    border-color:#333366 ;
+    border-width: 3px;
+    border-radius: 5px;
+}
